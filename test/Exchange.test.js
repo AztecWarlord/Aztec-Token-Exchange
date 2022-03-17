@@ -112,21 +112,21 @@ contract('Exchange', ([deployer, feeAccount, user1, user2]) => {
   	let amount
 
   	describe('success', () => {
-      beforeEach(async () => {
-        amount = tokens(10)
-        await token.approve(exchange.address, amount, { from: user1 })
-        result = await exchange.depositToken(token.address, amount, { from: user1 })
-      })
+      	  beforeEach(async () => {
+          amount = tokens(10)
+          await token.approve(exchange.address, amount, { from: user1 })
+          result = await exchange.depositToken(token.address, amount, { from: user1 })
+        })
 
-  		it('tracks the token deposit', async () => {
-  			// Check exchange token balance
-  			let balance
-  			balance = await token.balanceOf(exchange.address)
-  			balance.toString().should.equal(amount.toString())
-        // Check tokens on exchange
-        balance = await exchange.tokens(token.address, user1)
-        balance.toString().should.equal(amount.toString())
-  		})
+  	  it('tracks the token deposit', async () => {
+  	    // Check exchange token balance
+  	    let balance
+  	    balance = await token.balanceOf(exchange.address)
+            balance.toString().should.equal(amount.toString())
+            // Check tokens on exchange
+           balance = await exchange.tokens(token.address, user1)
+           balance.toString().should.equal(amount.toString())
+  	 })
 
       it('emits a Deposit event', async () => {
         const log = result.logs[0]
@@ -137,9 +137,9 @@ contract('Exchange', ([deployer, feeAccount, user1, user2]) => {
         event.amount.toString().should.equal(amount.toString(), 'amount is correct')
         event.balance.toString().should.equal(amount.toString(), 'balance is correct')
       })
-  	})
+  })
 
-  	describe('failure', () => {
+  describe('failure', () => {
       it('rejects Ether deposits', async () => {
         await exchange.depositToken(ETHER_ADDRESS, tokens(10), { from: user1 }).should.be.rejectedWith(EVM_REVERT)
       })
@@ -148,7 +148,7 @@ contract('Exchange', ([deployer, feeAccount, user1, user2]) => {
         // Don't approve any tokens before depositing
         await exchange.depositToken(token.address, tokens(10), { from: user1 }).should.be.rejectedWith(EVM_REVERT)
       })
-  	})
+    })
   })
 
   describe('withdrawing tokens', async () => {
